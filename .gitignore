@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Remotion output
+out/
+
+# OS files
+.DS_Store
+
+# Lock files (each sub-project can reinstall)
+package-lock.json
