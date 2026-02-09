@@ -2,25 +2,31 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {FeatureLabel} from '../../components/ui/FeatureLabel';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
 import {Scanlines} from '../../components/effects/Scanlines';
 import {easeOutCubic} from '../../utils/easing';
 
-const INSTALL_LINES = [
-  {text: '$ npx skills add twwch/video-link-parser-skill@video-link-parser', delay: 0},
-  {text: '  ⠋ 正在获取技能信息...', delay: 12},
-  {text: '  ✓ 验证技能仓库', delay: 24},
-  {text: '  ✓ 下载 SKILL.md + scripts/', delay: 36},
-  {text: '  ✓ 安装到 ~/.claude/skills/', delay: 48},
-  {text: '  ✅ 技能安装成功!', delay: 60},
-];
+// INSTALL_LINES moved inside component for i18n
 
 export const SkillInstall: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[6];
+
+  const INSTALL_LINES = [
+    {text: '$ npx skills add twwch/video-link-parser-skill@video-link-parser', delay: 0},
+    {text: L(lang, '  ⠋ 正在获取技能信息...', '  ⠋ Fetching skill info...'), delay: 12},
+    {text: L(lang, '  ✓ 验证技能仓库', '  ✓ Verified skill repository'), delay: 24},
+    {text: L(lang, '  ✓ 下载 SKILL.md + scripts/', '  ✓ Downloaded SKILL.md + scripts/'), delay: 36},
+    {text: L(lang, '  ✓ 安装到 ~/.claude/skills/', '  ✓ Installed to ~/.claude/skills/'), delay: 48},
+    {text: L(lang, '  ✅ 技能安装成功!', '  ✅ Skill installed successfully!'), delay: 60},
+  ];
 
   return (
     <AbsoluteFill style={{background: COLORS.bgPrimary}}>
@@ -43,8 +49,8 @@ export const SkillInstall: React.FC = () => {
             {/* Add Skill Dialog card */}
             <div style={{marginTop: 24, opacity: interpolate(frame, [40, 55], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), transform: `translateY(${interpolate(frame, [40, 55], [12, 0], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}px)`}}>
               <div style={{padding: '14px 16px', borderRadius: 12, background: COLORS.bgCard, border: `1px solid ${COLORS.borderGlass}`}}>
-                <div style={{fontFamily: FONTS.cn, fontSize: 14, fontWeight: 600, color: COLORS.textPrimary, marginBottom: 4}}>添加技能</div>
-                <div style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.textMuted, marginBottom: 12}}>输入技能仓库地址来安装新技能</div>
+                <div style={{fontFamily: FONTS.cn, fontSize: 14, fontWeight: 600, color: COLORS.textPrimary, marginBottom: 4}}>{L(lang, '添加技能', 'Add Skill')}</div>
+                <div style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.textMuted, marginBottom: 12}}>{L(lang, '输入技能仓库地址来安装新技能', 'Enter skill repository URL to install')}</div>
                 {/* Input field */}
                 <div style={{padding: '8px 12px', borderRadius: 8, background: COLORS.bgTerminal, border: `1px solid ${COLORS.borderGlass}`, marginBottom: 10}}>
                   <div style={{fontFamily: FONTS.mono, fontSize: 11, color: COLORS.textPrimary}}>
@@ -52,13 +58,13 @@ export const SkillInstall: React.FC = () => {
                   </div>
                 </div>
                 {/* Example */}
-                <div style={{fontFamily: FONTS.cn, fontSize: 10, color: COLORS.textMuted, marginBottom: 8}}>示例：</div>
+                <div style={{fontFamily: FONTS.cn, fontSize: 10, color: COLORS.textMuted, marginBottom: 8}}>{L(lang, '示例：', 'Example:')}</div>
                 <div style={{padding: '6px 10px', borderRadius: 6, background: COLORS.bgGlass, fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textSecondary, wordBreak: 'break-all' as const, lineHeight: 1.5}}>
                   npx skills add twwch/video-link-parser-skill@video-link-parser
                 </div>
                 {/* Install button */}
                 <div style={{marginTop: 12, padding: '8px 0', borderRadius: 8, background: GRADIENT.brand, textAlign: 'center', fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: 'white'}}>
-                  安装技能
+                  {L(lang, '安装技能', 'Install Skill')}
                 </div>
               </div>
             </div>
@@ -69,7 +75,7 @@ export const SkillInstall: React.FC = () => {
             <div style={{borderRadius: 16, border: `1px solid ${COLORS.borderGlass}`, background: `${COLORS.bgSecondary}90`, overflow: 'hidden'}}>
               {/* Top bar */}
               <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderBottom: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)'}}>
-                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>安装技能</span>
+                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '安装技能', 'Install Skill')}</span>
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.green, padding: '2px 8px', borderRadius: 10, background: COLORS.greenDim}}>terminal</span>
                 <div style={{flex: 1}} />
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>tokens: 1.2k</span>
@@ -83,11 +89,11 @@ export const SkillInstall: React.FC = () => {
                   </div>
                   <div>
                     <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
-                      <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
-                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                      <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
+                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      安装 video-link-parser 技能
+                      {L(lang, '安装 video-link-parser 技能', 'Install the video-link-parser skill')}
                     </div>
                   </div>
                 </div>
@@ -102,7 +108,7 @@ export const SkillInstall: React.FC = () => {
                       <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      好的，正在为你安装视频链接解析技能。
+                      {L(lang, '好的，正在为你安装视频链接解析技能。', 'Sure, installing the video link parser skill.')}
                     </div>
                   </div>
                 </div>
@@ -142,7 +148,7 @@ export const SkillInstall: React.FC = () => {
                     })}
                   </div>
                   <div style={{padding: '5px 12px', borderTop: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)', display: 'flex', justifyContent: 'space-between', fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>
-                    <span>耗时 2.8s</span>
+                    <span>{L(lang, '耗时 2.8s', 'Duration: 2.8s')}</span>
                     <span>exit code: 0</span>
                   </div>
                 </div>
@@ -157,7 +163,7 @@ export const SkillInstall: React.FC = () => {
                       <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      安装完成！现在可以使用 <span style={{fontFamily: FONTS.mono, color: COLORS.green}}>@video-link-parser</span> 来解析视频链接。
+                      {L(lang, '安装完成！现在可以使用 ', 'Installation complete! You can now use ')}<span style={{fontFamily: FONTS.mono, color: COLORS.green}}>@video-link-parser</span>{L(lang, ' 来解析视频链接。', ' to parse video links.')}
                     </div>
                   </div>
                 </div>
@@ -179,7 +185,7 @@ export const SkillInstall: React.FC = () => {
                   </div>
                 </div>
                 <div style={{padding: '10px 14px', borderRadius: 10, background: COLORS.bgTertiary, border: `1px solid ${COLORS.borderGlass}`, display: 'flex', alignItems: 'center', gap: 8}}>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>输入消息...</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>{L(lang, '输入消息...', 'Type a message...')}</span>
                   <div style={{flex: 1}} />
                   <div style={{width: 24, height: 24, borderRadius: 6, background: GRADIENT.brand, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <svg width={11} height={11} viewBox="0 0 24 24" fill="white"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>

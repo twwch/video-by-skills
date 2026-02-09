@@ -2,7 +2,9 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {FeatureLabel} from '../../components/ui/FeatureLabel';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
@@ -11,6 +13,8 @@ import {easeOutCubic} from '../../utils/easing';
 
 export const LiveTerminal: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[1];
 
   return (
@@ -38,11 +42,11 @@ export const LiveTerminal: React.FC = () => {
                   <div style={{width: 24, height: 24, borderRadius: 6, background: GRADIENT.aiAvatar, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M8 8h8M8 12h6M8 16h4" /></svg>
                   </div>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary}}>安全沙箱环境</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary}}>{L(lang, '安全沙箱环境', 'Secure Sandbox')}</span>
                   <span style={{marginLeft: 'auto', fontFamily: FONTS.mono, fontSize: 11, color: COLORS.green, padding: '2px 8px', borderRadius: 4, background: COLORS.greenDim}}>active</span>
                 </div>
                 <div style={{display: 'flex', gap: 16}}>
-                  {[{label: '隔离级别', value: 'Container'}, {label: '超时', value: '30s'}, {label: '权限', value: 'Read/Write'}].map((item, i) => (
+                  {[{label: L(lang, '隔离级别', 'Isolation'), value: 'Container'}, {label: L(lang, '超时', 'Timeout'), value: '30s'}, {label: L(lang, '权限', 'Permissions'), value: 'Read/Write'}].map((item, i) => (
                     <div key={i} style={{opacity: interpolate(frame, [55 + i * 8, 65 + i * 8], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>
                       <div style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.textMuted, marginBottom: 2}}>{item.label}</div>
                       <div style={{fontFamily: FONTS.mono, fontSize: 12, color: COLORS.textPrimary}}>{item.value}</div>
@@ -58,7 +62,7 @@ export const LiveTerminal: React.FC = () => {
             <div style={{borderRadius: 16, border: `1px solid ${COLORS.borderGlass}`, background: `${COLORS.bgSecondary}90`, overflow: 'hidden'}}>
               {/* Chat top bar */}
               <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderBottom: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)'}}>
-                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>React 项目创建</span>
+                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, 'React 项目创建', 'React Project Setup')}</span>
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.green, padding: '2px 8px', borderRadius: 10, background: COLORS.greenDim}}>2 Skills</span>
                 <div style={{flex: 1}} />
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>tokens: 1.2k</span>
@@ -73,11 +77,11 @@ export const LiveTerminal: React.FC = () => {
                   </div>
                   <div>
                     <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
-                      <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
-                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                      <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
+                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      帮我创建一个 React 项目并安装依赖
+                      {L(lang, '帮我创建一个 React 项目并安装依赖', 'Create a React project and install dependencies')}
                     </div>
                   </div>
                 </div>
@@ -90,10 +94,10 @@ export const LiveTerminal: React.FC = () => {
                   <div>
                     <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
                       <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
-                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      好的，我来为你创建项目并配置开发环境。
+                      {L(lang, '好的，我来为你创建项目并配置开发环境。', 'Sure, I\'ll create the project and set up the dev environment.')}
                     </div>
                   </div>
                 </div>
@@ -109,7 +113,7 @@ export const LiveTerminal: React.FC = () => {
                     <div style={{flex: 1}} />
                     <div style={{display: 'flex', alignItems: 'center', gap: 5, padding: '2px 8px', borderRadius: 10, background: COLORS.greenDim, fontFamily: FONTS.mono, fontSize: 11, fontWeight: 500, color: COLORS.green}}>
                       <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke={COLORS.green} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                      完成
+                      {L(lang, '完成', 'Done')}
                     </div>
                   </div>
 
@@ -171,7 +175,7 @@ export const LiveTerminal: React.FC = () => {
                       <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      项目已就绪！我还帮你配置了 TypeScript 和 ESLint。
+                      {L(lang, '项目已就绪！我还帮你配置了 TypeScript 和 ESLint。', 'Project is ready! I\'ve also configured TypeScript and ESLint.')}
                     </div>
                   </div>
                 </div>
@@ -180,7 +184,7 @@ export const LiveTerminal: React.FC = () => {
               {/* Input area */}
               <div style={{padding: '10px 16px', borderTop: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.01)'}}>
                 <div style={{padding: '10px 14px', borderRadius: 10, background: COLORS.bgTertiary, border: `1px solid ${COLORS.borderGlass}`, display: 'flex', alignItems: 'center', gap: 8}}>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>输入消息...</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>{L(lang, '输入消息...', 'Type a message...')}</span>
                   <div style={{flex: 1}} />
                   <div style={{width: 24, height: 24, borderRadius: 6, background: GRADIENT.brand, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <svg width={11} height={11} viewBox="0 0 24 24" fill="white"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>

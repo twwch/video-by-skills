@@ -2,7 +2,9 @@ import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {SidebarLogo} from './Logo';
 import {easeOutCubic} from '../../utils/easing';
 
@@ -10,6 +12,8 @@ export const Sidebar: React.FC<{
   startFrame?: number;
 }> = ({startFrame = 0}) => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const elapsed = frame - startFrame;
   const slideX = interpolate(elapsed, [0, 20], [-260, 0], {
     easing: easeOutCubic,
@@ -49,7 +53,7 @@ export const Sidebar: React.FC<{
             gap: 8,
           }}
         >
-          <span style={{fontSize: 14}}>+</span> 新对话
+          <span style={{fontSize: 14}}>+</span> {L(lang, '新对话', 'New Chat')}
         </div>
       </div>
 

@@ -2,7 +2,9 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {FeatureLabel} from '../../components/ui/FeatureLabel';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
@@ -26,13 +28,7 @@ const FIND_LINES = [
   {text: 'onmax/nuxt-skills@reka-ui', color: COLORS.textSecondary},
 ];
 
-// Pre-installed skills
-const INSTALLED_SKILLS = [
-  {name: 'find-skills', icon: '\uD83D\uDD0D', desc: '技能查找助手', color: COLORS.blue},
-  {name: 'code-review', icon: '\uD83D\uDD0E', desc: '代码审查', color: COLORS.purple},
-  {name: 'remotion-best-practices', icon: '\uD83C\uDFAC', desc: 'Remotion 最佳实践', color: COLORS.green},
-  {name: 'skill-creator', icon: '\uD83D\uDEE0\uFE0F', desc: '技能创建向导', color: COLORS.amber},
-];
+// INSTALLED_SKILLS moved inside component for i18n
 
 // Avatars
 const UserAvatar: React.FC = () => (
@@ -83,7 +79,16 @@ const BashBlock: React.FC<{command: string; enterFrame: number}> = ({command, en
 
 export const SkillFind: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[4];
+
+  const INSTALLED_SKILLS = [
+    {name: 'find-skills', icon: '\uD83D\uDD0D', desc: L(lang, '技能查找助手', 'Skill Finder'), color: COLORS.blue},
+    {name: 'code-review', icon: '\uD83D\uDD0E', desc: L(lang, '代码审查', 'Code Review'), color: COLORS.purple},
+    {name: 'remotion-best-practices', icon: '\uD83C\uDFAC', desc: L(lang, 'Remotion 最佳实践', 'Remotion Best Practices'), color: COLORS.green},
+    {name: 'skill-creator', icon: '\uD83D\uDEE0\uFE0F', desc: L(lang, '技能创建向导', 'Skill Creator'), color: COLORS.amber},
+  ];
 
   // Scroll to reveal AI recommendation after Script Execution card
   const scrollY = interpolate(frame, [110, 138], [0, -320], {
@@ -114,7 +119,7 @@ export const SkillFind: React.FC = () => {
             <div style={{marginTop: 24, opacity: interpolate(frame, [35, 50], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), transform: `translateY(${interpolate(frame, [35, 50], [12, 0], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}px)`}}>
               <div style={{padding: '12px 14px', borderRadius: 10, background: COLORS.bgCard, border: `1px solid ${COLORS.borderGlass}`}}>
                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10}}>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary}}>已安装技能</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary}}>{L(lang, '已安装技能', 'Installed Skills')}</span>
                   <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.green, padding: '2px 8px', borderRadius: 4, background: COLORS.greenDim}}>{INSTALLED_SKILLS.length} installed</span>
                 </div>
                 {INSTALLED_SKILLS.map((skill, i) => (
@@ -134,7 +139,7 @@ export const SkillFind: React.FC = () => {
             <div style={{borderRadius: 16, border: `1px solid ${COLORS.borderGlass}`, background: `${COLORS.bgSecondary}90`, overflow: 'hidden'}}>
               {/* Top bar */}
               <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderBottom: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)'}}>
-                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>查找技能</span>
+                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '查找技能', 'Find Skills')}</span>
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.blue, padding: '2px 8px', borderRadius: 10, background: COLORS.blueDim}}>system</span>
                 <div style={{flex: 1}} />
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>tokens: 0.8k</span>
@@ -148,8 +153,8 @@ export const SkillFind: React.FC = () => {
                     <UserAvatar />
                     <div>
                       <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
-                        <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
-                        <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                        <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
+                        <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
                         ui-ux 的 skill
@@ -163,14 +168,14 @@ export const SkillFind: React.FC = () => {
                     <div>
                       <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
                         <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
-                        <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                        <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.8}}>
-                        我来搜索 UI/UX 相关的技能。
+                        {L(lang, '我来搜索 UI/UX 相关的技能。', 'Let me search for UI/UX related skills.')}
                         <br />
                         <span style={{color: COLORS.textMuted}}>Invoking skill <span style={{fontFamily: FONTS.mono, color: COLORS.blue}}>system</span>...</span>
                         <br />
-                        <span style={{color: COLORS.textMuted}}>正在搜索 UI/UX 相关的技能...</span>
+                        <span style={{color: COLORS.textMuted}}>{L(lang, '正在搜索 UI/UX 相关的技能...', 'Searching for UI/UX skills...')}</span>
                       </div>
                     </div>
                   </div>
@@ -232,16 +237,16 @@ export const SkillFind: React.FC = () => {
                         <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.8}}>
-                        {'找到了！这里有几个专门的 UI/UX 技能：'}
+                        {L(lang, '找到了！这里有几个专门的 UI/UX 技能：', 'Found them! Here are some dedicated UI/UX skills:')}
                         <br /><br />
-                        <span style={{fontWeight: 600, color: COLORS.textPrimary}}>推荐的 UI/UX 技能</span>
+                        <span style={{fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '推荐的 UI/UX 技能', 'Recommended UI/UX Skills')}</span>
                         <br />
                         <span style={{fontWeight: 600, color: COLORS.textPrimary}}>{'1. ui-ux-pro-max '}</span>
-                        <span style={{color: COLORS.amber}}>{'\u2B50(推荐)'}</span>
+                        <span style={{color: COLORS.amber}}>{'\u2B50'}{L(lang, '(推荐)', '(Recommended)')}</span>
                         <br />
-                        {'专业的 UI/UX 设计技能，提供全面的设计指导。'}
+                        {L(lang, '专业的 UI/UX 设计技能，提供全面的设计指导。', 'Professional UI/UX design skill with comprehensive guidance.')}
                         <br />
-                        {'安装命令：'}
+                        {L(lang, '安装命令：', 'Install command:')}
                       </div>
 
                       {/* Bash code block */}
@@ -257,7 +262,7 @@ export const SkillFind: React.FC = () => {
               {/* Input area */}
               <div style={{padding: '10px 16px', borderTop: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.01)'}}>
                 <div style={{padding: '10px 14px', borderRadius: 10, background: COLORS.bgTertiary, border: `1px solid ${COLORS.borderGlass}`, display: 'flex', alignItems: 'center', gap: 8}}>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>输入消息...</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>{L(lang, '输入消息...', 'Type a message...')}</span>
                   <div style={{flex: 1}} />
                   <div style={{width: 24, height: 24, borderRadius: 6, background: GRADIENT.brand, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <svg width={11} height={11} viewBox="0 0 24 24" fill="white"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>

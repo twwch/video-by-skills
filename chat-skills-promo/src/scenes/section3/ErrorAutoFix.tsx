@@ -2,19 +2,16 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {FeatureLabel} from '../../components/ui/FeatureLabel';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
 import {Scanlines} from '../../components/effects/Scanlines';
 import {easeOutCubic} from '../../utils/easing';
 
-const ERROR_LINES = [
-  {text: '$ python3 .../summarize.py https://...BV14rzQB9EJj', delay: 0},
-  {text: '🚀 开始处理视频...', delay: 5},
-  {text: '步骤 1/3: 下载视频', delay: 10},
-  {text: '❌ ModuleNotFoundError: No module named \'yt_dlp\'', delay: 16},
-];
+// ERROR_LINES and RECOVERY_STEPS moved inside component for i18n
 
 const FIX_LINES = [
   {text: '$ pip install yt_dlp', delay: 0},
@@ -23,16 +20,25 @@ const FIX_LINES = [
   {text: 'Successfully installed yt_dlp-2026.2.4', delay: 16},
 ];
 
-const RECOVERY_STEPS = [
-  {icon: '❌', label: '错误检测', detail: 'ModuleNotFoundError', color: COLORS.red},
-  {icon: '🔍', label: '自动诊断', detail: '缺少 yt_dlp 模块', color: COLORS.amber},
-  {icon: '🔧', label: '自动修复', detail: 'pip install yt_dlp', color: COLORS.blue},
-  {icon: '✅', label: '重试成功', detail: '任务正常完成', color: COLORS.green},
-];
-
 export const ErrorAutoFix: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[7];
+
+  const ERROR_LINES = [
+    {text: '$ python3 .../summarize.py https://...BV14rzQB9EJj', delay: 0},
+    {text: L(lang, '🚀 开始处理视频...', '🚀 Processing video...'), delay: 5},
+    {text: L(lang, '步骤 1/3: 下载视频', 'Step 1/3: Download video'), delay: 10},
+    {text: '❌ ModuleNotFoundError: No module named \'yt_dlp\'', delay: 16},
+  ];
+
+  const RECOVERY_STEPS = [
+    {icon: '❌', label: L(lang, '错误检测', 'Error Detected'), detail: 'ModuleNotFoundError', color: COLORS.red},
+    {icon: '🔍', label: L(lang, '自动诊断', 'Auto Diagnose'), detail: L(lang, '缺少 yt_dlp 模块', 'Missing yt_dlp module'), color: COLORS.amber},
+    {icon: '🔧', label: L(lang, '自动修复', 'Auto Fix'), detail: 'pip install yt_dlp', color: COLORS.blue},
+    {icon: '✅', label: L(lang, '重试成功', 'Retry Success'), detail: L(lang, '任务正常完成', 'Task completed'), color: COLORS.green},
+  ];
 
   return (
     <AbsoluteFill style={{background: COLORS.bgPrimary}}>
@@ -55,7 +61,7 @@ export const ErrorAutoFix: React.FC = () => {
             {/* Recovery flow card */}
             <div style={{marginTop: 24, opacity: interpolate(frame, [40, 55], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), transform: `translateY(${interpolate(frame, [40, 55], [12, 0], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}px)`}}>
               <div style={{padding: '14px 16px', borderRadius: 10, background: COLORS.bgCard, border: `1px solid ${COLORS.borderGlass}`}}>
-                <div style={{fontFamily: FONTS.cn, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary, marginBottom: 12}}>自动修复流程</div>
+                <div style={{fontFamily: FONTS.cn, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary, marginBottom: 12}}>{L(lang, '自动修复流程', 'Auto Recovery Flow')}</div>
                 {RECOVERY_STEPS.map((step, i) => {
                   const stepOpacity = interpolate(frame, [50 + i * 22, 62 + i * 22], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
                   return (
@@ -79,7 +85,7 @@ export const ErrorAutoFix: React.FC = () => {
             <div style={{borderRadius: 16, border: `1px solid ${COLORS.borderGlass}`, background: `${COLORS.bgSecondary}90`, overflow: 'hidden'}}>
               {/* Top bar */}
               <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderBottom: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)'}}>
-                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>视频总结</span>
+                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '视频总结', 'Video Summary')}</span>
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.amber, padding: '2px 8px', borderRadius: 10, background: COLORS.amberDim}}>bilibili-video-summarizer</span>
                 <div style={{flex: 1}} />
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>tokens: 2.1k</span>
@@ -93,13 +99,13 @@ export const ErrorAutoFix: React.FC = () => {
                   </div>
                   <div>
                     <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2}}>
-                      <span style={{fontFamily: FONTS.body, fontSize: 11, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
+                      <span style={{fontFamily: FONTS.body, fontSize: 11, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
                       <span style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textMuted}}>09:04</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5}}>
                       <span style={{fontFamily: FONTS.mono, color: COLORS.amber, fontWeight: 600}}>@bilibili-video-summarizer</span>{' '}
                       <span style={{fontFamily: FONTS.mono, fontSize: 11, color: COLORS.cyan}}>bilibili.com/video/BV14rzQB9EJj</span>{' '}
-                      总结一下这个视频
+                      {L(lang, '总结一下这个视频', 'Summarize this video')}
                     </div>
                   </div>
                 </div>
@@ -115,7 +121,7 @@ export const ErrorAutoFix: React.FC = () => {
                       <span style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textMuted}}>09:05</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      我来帮你总结这个B站视频。让我先下载视频并进行语音识别。
+                      {L(lang, '我来帮你总结这个B站视频。让我先下载视频并进行语音识别。', 'I\'ll summarize this Bilibili video. Let me download it and run speech recognition.')}
                     </div>
                     <div style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted, marginTop: 2}}>
                       Invoking skill <span style={{color: COLORS.amber}}>bilibili-video-summarizer</span>...
@@ -166,10 +172,10 @@ export const ErrorAutoFix: React.FC = () => {
                       <span style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textMuted}}>09:05</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      我发现缺少 <span style={{fontFamily: FONTS.mono, color: COLORS.amber, background: COLORS.amberDim, padding: '1px 5px', borderRadius: 3, fontSize: 11}}>yt_dlp</span> 模块。让我先安装它。
+                      {L(lang, '我发现缺少 ', 'I found the ')}<span style={{fontFamily: FONTS.mono, color: COLORS.amber, background: COLORS.amberDim, padding: '1px 5px', borderRadius: 3, fontSize: 11}}>yt_dlp</span>{L(lang, ' 模块。让我先安装它。', ' module is missing. Let me install it.')}
                     </div>
                     <div style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted, marginTop: 2}}>
-                      Invoking skill <span style={{color: COLORS.green}}>system</span>... 正在安装依赖...
+                      Invoking skill <span style={{color: COLORS.green}}>system</span>... {L(lang, '正在安装依赖...', 'Installing dependencies...')}
                     </div>
                   </div>
                 </div>
@@ -210,7 +216,7 @@ export const ErrorAutoFix: React.FC = () => {
               {/* Input area */}
               <div style={{padding: '8px 16px', borderTop: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.01)'}}>
                 <div style={{padding: '8px 12px', borderRadius: 10, background: COLORS.bgTertiary, border: `1px solid ${COLORS.borderGlass}`, display: 'flex', alignItems: 'center', gap: 8}}>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.textMuted}}>输入消息...</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.textMuted}}>{L(lang, '输入消息...', 'Type a message...')}</span>
                   <div style={{flex: 1}} />
                   <div style={{width: 22, height: 22, borderRadius: 6, background: GRADIENT.brand, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <svg width={10} height={10} viewBox="0 0 24 24" fill="white"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>

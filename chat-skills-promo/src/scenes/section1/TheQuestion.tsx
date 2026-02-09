@@ -1,13 +1,17 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS} from '../../config/colors';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {TypewriterText} from '../../components/text/TypewriterText';
 import {GlitchTransition} from '../../components/transitions/GlitchTransition';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {FONTS} from '../../config/typography';
 
 export const TheQuestion: React.FC = () => {
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const frame = useCurrentFrame();
 
   // Freeze effect: a brief white flash at the start
@@ -36,7 +40,7 @@ export const TheQuestion: React.FC = () => {
             startFrame={20}
             fontSize={60}
             fontFamily={FONTS.cn}
-            charsPerFrame={0.6}
+            charsPerFrame={L(lang, 0.6, 1.0)}
             color={COLORS.textPrimary}
           />
         </div>

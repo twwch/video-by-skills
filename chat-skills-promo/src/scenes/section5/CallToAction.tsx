@@ -2,7 +2,9 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {Logo} from '../../components/ui/Logo';
 import {GradientText} from '../../components/text/GradientText';
 import {PulseGlow} from '../../components/effects/PulseGlow';
@@ -10,6 +12,8 @@ import {easeOutCubic} from '../../utils/easing';
 
 export const CallToAction: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
 
   const urlOpacity = interpolate(frame, [30, 50], [0, 1], {
     easing: easeOutCubic,

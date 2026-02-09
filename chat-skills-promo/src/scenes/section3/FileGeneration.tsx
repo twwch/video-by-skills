@@ -7,7 +7,9 @@ import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
 import {Scanlines} from '../../components/effects/Scanlines';
 import {easeOutCubic} from '../../utils/easing';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 
 // HTML code lines for the code view
 const HTML_CODE = [
@@ -30,6 +32,8 @@ const HTML_CODE = [
 
 export const FileGeneration: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[2];
 
   // Code/Preview toggle — switches at frame 140
@@ -80,7 +84,7 @@ export const FileGeneration: React.FC = () => {
             <div style={{borderRadius: 16, border: `1px solid ${COLORS.borderGlass}`, background: `${COLORS.bgSecondary}90`, overflow: 'hidden'}}>
               {/* Chat top bar */}
               <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderBottom: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)'}}>
-                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>HTML 文件生成</span>
+                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, 'HTML 文件生成', 'HTML File Generation')}</span>
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.purple, padding: '2px 8px', borderRadius: 10, background: COLORS.purpleDim}}>file-gen</span>
                 <div style={{flex: 1}} />
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>tokens: 2.1k</span>
@@ -94,11 +98,11 @@ export const FileGeneration: React.FC = () => {
                   </div>
                   <div>
                     <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
-                      <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
-                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                      <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
+                      <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      帮我生成一个 AI 对话产品的落地页 HTML
+                      {L(lang, '帮我生成一个 AI 对话产品的落地页 HTML', 'Generate a landing page HTML for an AI chat product')}
                     </div>
                   </div>
                 </div>
@@ -113,7 +117,7 @@ export const FileGeneration: React.FC = () => {
                       <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
                     </div>
                     <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                      好的，我来生成一个完整的落地页 HTML 文件。
+                      {L(lang, '好的，我来生成一个完整的落地页 HTML 文件。', 'Sure, I\'ll generate a complete landing page HTML file.')}
                     </div>
                   </div>
                 </div>
@@ -178,19 +182,19 @@ export const FileGeneration: React.FC = () => {
                         {/* Hero section */}
                         <div style={{textAlign: 'center', padding: '20px 0 16px', opacity: interpolate(frame, [155, 168], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>
                           <div style={{fontFamily: FONTS.cn, fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 6}}>
-                            让 AI 拥有技能
+                            {L(lang, '让 AI 拥有技能', 'AI With Skills')}
                           </div>
                           <div style={{fontFamily: FONTS.cn, fontSize: 10, color: '#666', marginBottom: 12}}>
-                            AI 驱动的技能集成对话平台
+                            {L(lang, 'AI 驱动的技能集成对话平台', 'AI-Powered Skill-Integrated Chat Platform')}
                           </div>
                           <div style={{display: 'inline-flex', padding: '6px 20px', borderRadius: 6, background: 'linear-gradient(135deg, #22C55E, #3B82F6)', fontFamily: FONTS.cn, fontSize: 10, color: 'white', fontWeight: 600}}>
-                            开始使用
+                            {L(lang, '开始使用', 'Get Started')}
                           </div>
                         </div>
 
                         {/* Feature cards */}
                         <div style={{display: 'flex', gap: 8, padding: '0 8px', opacity: interpolate(frame, [165, 180], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>
-                          {[{title: '终端执行', color: '#22C55E'}, {title: '文件生成', color: '#A855F7'}, {title: '网页搜索', color: '#3B82F6'}].map((card, i) => (
+                          {[{title: L(lang, '终端执行', 'Terminal'), color: '#22C55E'}, {title: L(lang, '文件生成', 'File Gen'), color: '#A855F7'}, {title: L(lang, '网页搜索', 'Web Search'), color: '#3B82F6'}].map((card, i) => (
                             <div key={i} style={{flex: 1, padding: '10px 8px', borderRadius: 6, border: '1px solid #e5e7eb', textAlign: 'center'}}>
                               <div style={{width: 20, height: 20, borderRadius: 4, background: `${card.color}15`, margin: '0 auto 6px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                 <div style={{width: 8, height: 8, borderRadius: 2, background: card.color}} />
@@ -229,7 +233,7 @@ export const FileGeneration: React.FC = () => {
               {/* Input area */}
               <div style={{padding: '10px 16px', borderTop: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.01)'}}>
                 <div style={{padding: '10px 14px', borderRadius: 10, background: COLORS.bgTertiary, border: `1px solid ${COLORS.borderGlass}`, display: 'flex', alignItems: 'center', gap: 8}}>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>输入消息...</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted}}>{L(lang, '输入消息...', 'Type a message...')}</span>
                   <div style={{flex: 1}} />
                   <div style={{width: 24, height: 24, borderRadius: 6, background: GRADIENT.brand, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <svg width={11} height={11} viewBox="0 0 24 24" fill="white"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>

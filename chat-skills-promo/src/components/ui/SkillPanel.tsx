@@ -2,7 +2,9 @@ import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {easeOutCubic} from '../../utils/easing';
 
 /** Right panel — skill context + activity timeline (300px) matching original */
@@ -10,6 +12,8 @@ export const SkillPanel: React.FC<{
   startFrame?: number;
 }> = ({startFrame = 0}) => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const elapsed = frame - startFrame;
   const slideX = interpolate(elapsed, [0, 20], [300, 0], {
     easing: easeOutCubic,
@@ -50,7 +54,7 @@ export const SkillPanel: React.FC<{
             marginBottom: 12,
           }}
         >
-          Skill Context
+          {L(lang, 'Skill Context', 'Skill Context')}
         </div>
 
         {/* Active skill card */}
@@ -82,19 +86,19 @@ export const SkillPanel: React.FC<{
                 terminal
               </div>
               <div style={{fontFamily: FONTS.body, fontSize: 11, color: COLORS.textMuted}}>
-                终端执行
+                {L(lang, '终端执行', 'Terminal')}
               </div>
             </div>
           </div>
           <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted, lineHeight: 1.5}}>
-            在安全沙箱中执行命令和脚本，支持 Node.js、Python 等运行时
+            {L(lang, '在安全沙箱中执行命令和脚本，支持 Node.js、Python 等运行时', 'Execute commands and scripts in a sandbox with Node.js, Python, and more')}
           </div>
 
           {/* Meta rows */}
           {[
-            {label: '状态', value: '就绪'},
-            {label: '超时', value: '30s'},
-            {label: '沙箱', value: 'Docker'},
+            {label: L(lang, '状态', 'Status'), value: L(lang, '就绪', 'Ready')},
+            {label: L(lang, '超时', 'Timeout'), value: '30s'},
+            {label: L(lang, '沙箱', 'Sandbox'), value: 'Docker'},
           ].map((row, i) => {
             const rowOpacity = interpolate(elapsed, [20 + i * 5, 30 + i * 5], [0, 1], {
               extrapolateLeft: 'clamp',
@@ -192,7 +196,7 @@ export const SkillPanel: React.FC<{
                     {item.action}
                   </div>
                   <div style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted, marginTop: 2}}>
-                    刚刚
+                    {L(lang, '刚刚', 'just now')}
                   </div>
                 </div>
               </div>

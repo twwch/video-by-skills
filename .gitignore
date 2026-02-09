@@ -9,3 +9,5 @@ out/
 
 # Lock files (each sub-project can reinstall)
 package-lock.json
+
+.claude

@@ -1,7 +1,8 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS} from '../../config/colors';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {Sidebar} from '../../components/ui/Sidebar';
 import {ChatWindow} from '../../components/ui/ChatWindow';
 import {ChatMessage} from '../../components/ui/ChatMessage';
@@ -9,6 +10,8 @@ import {SkillPanel} from '../../components/ui/SkillPanel';
 import {easeOutCubic} from '../../utils/easing';
 
 export const UIOverview: React.FC = () => {
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const frame = useCurrentFrame();
 
   const containerScale = interpolate(frame, [0, 25], [0.92, 1], {

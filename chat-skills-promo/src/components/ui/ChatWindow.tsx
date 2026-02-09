@@ -1,11 +1,15 @@
 import React from 'react';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 
 export const ChatWindow: React.FC<{
   children: React.ReactNode;
 }> = ({children}) => {
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   return (
     <div
       style={{
@@ -31,7 +35,7 @@ export const ChatWindow: React.FC<{
       >
         <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
           <span style={{fontFamily: FONTS.heading, fontSize: 14, fontWeight: 600, color: COLORS.textPrimary}}>
-            React 项目创建
+            {L(lang, 'React 项目创建', 'React Project Setup')}
           </span>
           {/* Active skill count badge */}
           <div
@@ -146,7 +150,7 @@ export const ChatWindow: React.FC<{
           </svg>
 
           <span style={{flex: 1, fontFamily: FONTS.cn, fontSize: 14, color: COLORS.textMuted}}>
-            输入消息...
+            {L(lang, '输入消息...', 'Type a message...')}
           </span>
 
           {/* Model selector */}

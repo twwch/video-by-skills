@@ -2,6 +2,8 @@ import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {easeOutCubic} from '../../utils/easing';
 import {ParticleField} from '../../components/effects/ParticleField';
 import {AnimatedHeadline} from '../../components/text/AnimatedHeadline';
@@ -426,6 +428,7 @@ const ConnSvg: React.FC<{
 // ═══════════════════════════════════════════
 export const ArchitectureFlow: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
 
   return (
     <AbsoluteFill style={{background: COLORS.bgPrimary}}>
@@ -456,7 +459,7 @@ export const ArchitectureFlow: React.FC = () => {
           justifyContent: 'center',
         }}
       >
-        <AnimatedHeadline text="系统架构" fontSize={42} startFrame={3} />
+        <AnimatedHeadline text={L(lang, '系统架构', 'Architecture')} fontSize={42} startFrame={3} />
       </div>
 
       {/* Title underline */}
@@ -484,8 +487,8 @@ export const ArchitectureFlow: React.FC = () => {
         <LayerPanel
           key={i}
           row={layer.row}
-          label={layer.label}
-          en={layer.en}
+          label={L(lang, layer.label, layer.en)}
+          en={L(lang, layer.en, layer.label)}
           color={layer.color}
           enterFrame={6 + i * 14}
         />

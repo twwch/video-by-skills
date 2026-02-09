@@ -2,13 +2,17 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {GradientText} from '../../components/text/GradientText';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {easeOutCubic} from '../../utils/easing';
 
 export const SummaryTagline: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
 
   const beforeOpacity = interpolate(frame, [10, 25, 60, 75], [0, 1, 1, 0], {
     extrapolateLeft: 'clamp',

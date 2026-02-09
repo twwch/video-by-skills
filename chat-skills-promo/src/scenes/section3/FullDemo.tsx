@@ -2,55 +2,16 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {FeatureLabel} from '../../components/ui/FeatureLabel';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
 import {Scanlines} from '../../components/effects/Scanlines';
 import {easeOutCubic} from '../../utils/easing';
 
-// Step 1: Download video
-const DOWNLOAD_LINES = [
-  {text: '$ python3 .../download_video.py https://www.bilibili.com/video/BV14rzQB9EJj', d: 0},
-  {text: '[BiliBili] Extracting URL: https://www.bilibili.com/video/BV14rzQB9EJj', d: 4},
-  {text: '🎬 开始下载视频: https://www.bilibili.com/video/BV14rzQB9EJj', d: 8},
-  {text: '📁 输出目录: /tmp/chat-skills-output/bilibili-video-summarizer/downloads', d: 11},
-  {text: '[BiliBili] BV14rzQB9EJj: Downloading webpage', d: 14},
-  {text: '[BiliBili] BV14rzQB9EJj: Extracting videos in anthology', d: 17},
-  {text: '[BiliBili] BV14rzQB9EJj: Downloading wbi sign', d: 20},
-  {text: '[BiliBili] BV14rzQB9EJj: Downloading video formats for cid 3560204...', d: 23},
-];
-
-// Step 2: Whisper transcription
-const WHISPER_LINES = [
-  {text: '$ python3 .../transcribe_audio.py .../downloads/BV14rzQB9EJj.m4a', d: 0},
-  {text: '🔧 开始识别: .../downloads/BV14rzQB9EJj.m4a', d: 4},
-  {text: '🧠 模型: base', d: 7},
-  {text: '📦 加载 Whisper 模型: base', d: 10},
-  {text: '🔧 开始识别音频: BV14rzQB9EJj.m4a', d: 13},
-  {text: '===================================================', d: 17},
-  {text: '✅ 识别完成', d: 20},
-  {text: '📄 转录文本: .../downloads/BV14rzQB9EJj_transcript.txt', d: 23},
-];
-
-// Step 3: Summary structure
-const SUMMARY_CONTENT = [
-  {text: '标题: Claude Code 从 0 到 1 全攻略: MCP / SubAgent / Agent Skill / Hook', type: 'meta'},
-  {text: '时长: 44分44秒 | 链接: bilibili.com/video/BV14rzQB9EJj', type: 'meta'},
-  {text: '🎯 核心内容概述', type: 'header'},
-  {text: '从零到精通 Claude Code 的完整实战教程，涵盖环境搭建、任务处理、多模态交互、高级功能定制等流程。', type: 'body'},
-  {text: '📁 内容结构（按时间线）', type: 'header'},
-  {text: '1. 安装与登录 — 订阅制 / API key 两种登录方式', type: 'item'},
-  {text: '2. 三种工作模式 — 默认/自动/规划，Shift+Tab 切换', type: 'item'},
-  {text: '3. 技术栈迁移 — HTML 重构为 React + TypeScript + Vite', type: 'item'},
-  {text: '4. 权限管理 — 终端命令需单独授权，危险参数慎用', type: 'item'},
-];
-
-const PIPELINE_STEPS = [
-  {label: '下载视频', completedAt: 100},
-  {label: '语音识别', completedAt: 218},
-  {label: '生成摘要', completedAt: 270},
-];
+// DOWNLOAD_LINES, WHISPER_LINES, SUMMARY_CONTENT, PIPELINE_STEPS moved inside component for i18n
 
 // Shared avatar components
 const UserAvatar: React.FC = () => (
@@ -114,7 +75,49 @@ const ScriptCard: React.FC<{
 
 export const FullDemo: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[8];
+
+  const DOWNLOAD_LINES = [
+    {text: '$ python3 .../download_video.py https://www.bilibili.com/video/BV14rzQB9EJj', d: 0},
+    {text: '[BiliBili] Extracting URL: https://www.bilibili.com/video/BV14rzQB9EJj', d: 4},
+    {text: L(lang, '🎬 开始下载视频: https://www.bilibili.com/video/BV14rzQB9EJj', '🎬 Downloading video: https://www.bilibili.com/video/BV14rzQB9EJj'), d: 8},
+    {text: L(lang, '📁 输出目录: /tmp/chat-skills-output/bilibili-video-summarizer/downloads', '📁 Output dir: /tmp/chat-skills-output/bilibili-video-summarizer/downloads'), d: 11},
+    {text: '[BiliBili] BV14rzQB9EJj: Downloading webpage', d: 14},
+    {text: '[BiliBili] BV14rzQB9EJj: Extracting videos in anthology', d: 17},
+    {text: '[BiliBili] BV14rzQB9EJj: Downloading wbi sign', d: 20},
+    {text: '[BiliBili] BV14rzQB9EJj: Downloading video formats for cid 3560204...', d: 23},
+  ];
+
+  const WHISPER_LINES = [
+    {text: '$ python3 .../transcribe_audio.py .../downloads/BV14rzQB9EJj.m4a', d: 0},
+    {text: L(lang, '🔧 开始识别: .../downloads/BV14rzQB9EJj.m4a', '🔧 Starting recognition: .../downloads/BV14rzQB9EJj.m4a'), d: 4},
+    {text: L(lang, '🧠 模型: base', '🧠 Model: base'), d: 7},
+    {text: L(lang, '📦 加载 Whisper 模型: base', '📦 Loading Whisper model: base'), d: 10},
+    {text: L(lang, '🔧 开始识别音频: BV14rzQB9EJj.m4a', '🔧 Recognizing audio: BV14rzQB9EJj.m4a'), d: 13},
+    {text: '===================================================', d: 17},
+    {text: L(lang, '✅ 识别完成', '✅ Recognition complete'), d: 20},
+    {text: L(lang, '📄 转录文本: .../downloads/BV14rzQB9EJj_transcript.txt', '📄 Transcript: .../downloads/BV14rzQB9EJj_transcript.txt'), d: 23},
+  ];
+
+  const SUMMARY_CONTENT = [
+    {text: L(lang, '标题: Claude Code 从 0 到 1 全攻略: MCP / SubAgent / Agent Skill / Hook', 'Title: Claude Code From 0 to 1: MCP / SubAgent / Agent Skill / Hook'), type: 'meta'},
+    {text: L(lang, '时长: 44分44秒 | 链接: bilibili.com/video/BV14rzQB9EJj', 'Duration: 44m44s | Link: bilibili.com/video/BV14rzQB9EJj'), type: 'meta'},
+    {text: L(lang, '🎯 核心内容概述', '🎯 Core Overview'), type: 'header'},
+    {text: L(lang, '从零到精通 Claude Code 的完整实战教程，涵盖环境搭建、任务处理、多模态交互、高级功能定制等流程。', 'A complete hands-on tutorial for mastering Claude Code from scratch, covering environment setup, task processing, multimodal interaction, and advanced customization.'), type: 'body'},
+    {text: L(lang, '📁 内容结构（按时间线）', '📁 Content Structure (Timeline)'), type: 'header'},
+    {text: L(lang, '1. 安装与登录 — 订阅制 / API key 两种登录方式', '1. Install & Login — Subscription / API key login methods'), type: 'item'},
+    {text: L(lang, '2. 三种工作模式 — 默认/自动/规划，Shift+Tab 切换', '2. Three Modes — Default/Auto/Plan, Shift+Tab to switch'), type: 'item'},
+    {text: L(lang, '3. 技术栈迁移 — HTML 重构为 React + TypeScript + Vite', '3. Stack Migration — HTML refactored to React + TypeScript + Vite'), type: 'item'},
+    {text: L(lang, '4. 权限管理 — 终端命令需单独授权，危险参数慎用', '4. Permission Control — Terminal commands need authorization'), type: 'item'},
+  ];
+
+  const PIPELINE_STEPS = [
+    {label: L(lang, '下载视频', 'Download Video'), completedAt: 100},
+    {label: L(lang, '语音识别', 'Speech Recognition'), completedAt: 218},
+    {label: L(lang, '生成摘要', 'Generate Summary'), completedAt: 270},
+  ];
 
   // Smooth scroll: phase1 → phase2 → phase3
   const scroll1 = interpolate(frame, [118, 145], [0, -240], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -142,7 +145,7 @@ export const FullDemo: React.FC = () => {
             {/* Processing pipeline */}
             <div style={{marginTop: 24, opacity: interpolate(frame, [35, 50], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), transform: `translateY(${interpolate(frame, [35, 50], [12, 0], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}px)`}}>
               <div style={{padding: '14px 16px', borderRadius: 10, background: COLORS.bgCard, border: `1px solid ${COLORS.borderGlass}`}}>
-                <div style={{fontFamily: FONTS.cn, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary, marginBottom: 12}}>处理流程</div>
+                <div style={{fontFamily: FONTS.cn, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary, marginBottom: 12}}>{L(lang, '处理流程', 'Processing Pipeline')}</div>
                 {PIPELINE_STEPS.map((step, i) => {
                   const done = frame >= step.completedAt;
                   const stepOp = interpolate(frame, [40 + i * 12, 52 + i * 12], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -164,7 +167,7 @@ export const FullDemo: React.FC = () => {
                 <span style={{fontSize: 16}}>📺</span>
                 <div>
                   <div style={{fontFamily: FONTS.mono, fontSize: 11, fontWeight: 600, color: COLORS.textPrimary}}>bilibili-video-summarizer <span style={{fontSize: 9, color: COLORS.textMuted, fontWeight: 400}}>v1.2.0</span></div>
-                  <div style={{fontFamily: FONTS.cn, fontSize: 10, color: COLORS.textMuted}}>B站视频下载 + Whisper 转录 + AI 摘要</div>
+                  <div style={{fontFamily: FONTS.cn, fontSize: 10, color: COLORS.textMuted}}>{L(lang, 'B站视频下载 + Whisper 转录 + AI 摘要', 'Bilibili Download + Whisper Transcription + AI Summary')}</div>
                 </div>
               </div>
             </div>
@@ -175,7 +178,7 @@ export const FullDemo: React.FC = () => {
             <div style={{borderRadius: 16, border: `1px solid ${COLORS.borderGlass}`, background: `${COLORS.bgSecondary}90`, overflow: 'hidden'}}>
               {/* Top bar */}
               <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderBottom: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)'}}>
-                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>视频总结</span>
+                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '视频总结', 'Video Summary')}</span>
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.cyan, padding: '2px 8px', borderRadius: 10, background: `${COLORS.cyan}15`}}>bilibili-video-summarizer</span>
                 <div style={{flex: 1}} />
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>tokens: 3.2k</span>
@@ -192,13 +195,13 @@ export const FullDemo: React.FC = () => {
                     <UserAvatar />
                     <div>
                       <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2}}>
-                        <span style={{fontFamily: FONTS.body, fontSize: 11, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
+                        <span style={{fontFamily: FONTS.body, fontSize: 11, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
                         <span style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textMuted}}>09:04</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5}}>
                         <span style={{fontFamily: FONTS.mono, color: COLORS.cyan, fontWeight: 600}}>@bilibili-video-summarizer</span>{' '}
                         <span style={{fontFamily: FONTS.mono, fontSize: 10, color: '#00A1D6'}}>bilibili.com/video/BV14rzQB9EJj</span>{' '}
-                        总结一下这个视频
+                        {L(lang, '总结一下这个视频', 'Summarize this video')}
                       </div>
                     </div>
                   </div>
@@ -212,13 +215,13 @@ export const FullDemo: React.FC = () => {
                         <span style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textMuted}}>09:05</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                        我来帮你总结这个B站视频。让我先下载视频并进行语音识别。
+                        {L(lang, '我来帮你总结这个B站视频。让我先下载视频并进行语音识别。', 'I\'ll summarize this Bilibili video. Let me download it and run speech recognition.')}
                       </div>
                       <div style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted, marginTop: 2}}>
                         Invoking skill <span style={{color: COLORS.cyan, fontWeight: 600}}>bilibili-video-summarizer</span>...
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.cyan, marginTop: 2}}>
-                        正在下载视频...
+                        {L(lang, '正在下载视频...', 'Downloading video...')}
                       </div>
                     </div>
                   </div>
@@ -237,13 +240,13 @@ export const FullDemo: React.FC = () => {
                         <span style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textMuted}}>09:05</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                        太好了！视频下载成功。现在进行语音识别：
+                        {L(lang, '太好了！视频下载成功。现在进行语音识别：', 'Great! Video downloaded. Now running speech recognition:')}
                       </div>
                       <div style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted, marginTop: 2}}>
                         Invoking skill <span style={{color: COLORS.cyan, fontWeight: 600}}>bilibili-video-summarizer</span>...
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.cyan, marginTop: 2}}>
-                        正在使用 Whisper 进行语音识别，这个视频约44分钟，请稍候...
+                        {L(lang, '正在使用 Whisper 进行语音识别，这个视频约44分钟，请稍候...', 'Running Whisper speech recognition, ~44 min video, please wait...')}
                       </div>
                     </div>
                   </div>
@@ -262,17 +265,17 @@ export const FullDemo: React.FC = () => {
                         <span style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textMuted}}>09:15</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5, marginBottom: 6}}>
-                        太好了！语音识别完成。现在我根据识别出的文本为你生成结构化的视频摘要：
+                        {L(lang, '太好了！语音识别完成。现在我根据识别出的文本为你生成结构化的视频摘要：', 'Great! Speech recognition complete. Now generating a structured video summary from the transcript:')}
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary, marginBottom: 6}}>
-                        视频摘要：Claude Code 从 0 到 1 全攻略
+                        {L(lang, '视频摘要：Claude Code 从 0 到 1 全攻略', 'Video Summary: Claude Code From 0 to 1')}
                       </div>
 
                       {/* Summary card */}
                       <div style={{borderRadius: 8, border: `1px solid ${COLORS.cyan}25`, background: `${COLORS.cyan}06`, overflow: 'hidden', opacity: interpolate(frame, [275, 288], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), transform: `translateY(${interpolate(frame, [275, 288], [6, 0], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}px)`}}>
                         {/* Video info header */}
                         <div style={{padding: '8px 12px', borderBottom: `1px solid ${COLORS.cyan}15`}}>
-                          <div style={{fontFamily: FONTS.cn, fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4}}>📺 视频信息</div>
+                          <div style={{fontFamily: FONTS.cn, fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4}}>{L(lang, '📺 视频信息', '📺 Video Info')}</div>
                           {SUMMARY_CONTENT.filter(c => c.type === 'meta').map((line, i) => (
                             <div key={i} style={{fontFamily: FONTS.mono, fontSize: 9, color: COLORS.textSecondary, lineHeight: 1.6, opacity: interpolate(frame, [288 + i * 6, 294 + i * 6], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>
                               {line.text}
@@ -324,7 +327,7 @@ export const FullDemo: React.FC = () => {
                   </div>
                 </div>
                 <div style={{padding: '8px 12px', borderRadius: 10, background: COLORS.bgTertiary, border: `1px solid ${COLORS.borderGlass}`, display: 'flex', alignItems: 'center', gap: 8}}>
-                  <span style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.textMuted}}>输入消息...</span>
+                  <span style={{fontFamily: FONTS.cn, fontSize: 11, color: COLORS.textMuted}}>{L(lang, '输入消息...', 'Type a message...')}</span>
                   <div style={{flex: 1}} />
                   <div style={{width: 22, height: 22, borderRadius: 6, background: GRADIENT.brand, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <svg width={10} height={10} viewBox="0 0 24 24" fill="white"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>

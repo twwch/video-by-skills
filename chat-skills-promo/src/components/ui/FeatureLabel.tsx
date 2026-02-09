@@ -2,6 +2,8 @@ import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
+import {fontFor} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {easeOutCubic} from '../../utils/easing';
 
 export const FeatureLabel: React.FC<{
@@ -11,6 +13,7 @@ export const FeatureLabel: React.FC<{
   enterFrame: number;
 }> = ({title, subtitle, description, enterFrame}) => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
   const elapsed = frame - enterFrame;
   const opacity = interpolate(elapsed, [0, 15], [0, 1], {
     easing: easeOutCubic,
@@ -25,13 +28,13 @@ export const FeatureLabel: React.FC<{
 
   return (
     <div style={{opacity, transform: `translateX(${x}px)`}}>
-      <div style={{fontFamily: FONTS.cn, fontSize: 36, fontWeight: 700, color: COLORS.textPrimary, marginBottom: 6}}>
+      <div style={{fontFamily: fontFor(lang, 'heading'), fontSize: 36, fontWeight: 700, color: COLORS.textPrimary, marginBottom: 6}}>
         {title}
       </div>
       <div style={{fontFamily: FONTS.mono, fontSize: 16, color: COLORS.green, marginBottom: 12}}>
         {subtitle}
       </div>
-      <div style={{fontFamily: FONTS.cn, fontSize: 20, color: COLORS.textSecondary, lineHeight: 1.5}}>
+      <div style={{fontFamily: fontFor(lang, 'body'), fontSize: 20, color: COLORS.textSecondary, lineHeight: 1.5}}>
         {description}
       </div>
     </div>

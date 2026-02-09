@@ -2,7 +2,8 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate, random} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {CodeRain} from '../../components/effects/CodeRain';
 import {Scanlines} from '../../components/effects/Scanlines';
 import {easeOutCubic} from '../../utils/easing';
@@ -20,6 +21,8 @@ const ORBIT_POSITIONS = [
 ];
 
 export const ChaosOpening: React.FC = () => {
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const frame = useCurrentFrame();
 
   // Red danger pulse

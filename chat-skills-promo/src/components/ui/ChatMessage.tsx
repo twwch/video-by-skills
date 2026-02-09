@@ -2,6 +2,8 @@ import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {easeOutCubic} from '../../utils/easing';
 
 // SVG icons matching the original app
@@ -42,6 +44,8 @@ export const ChatMessage: React.FC<{
     extrapolateRight: 'clamp',
   });
 
+  const lang = useLanguage();
+
   if (role === 'skill-invoke') {
     return (
       <SkillInvokeCard
@@ -58,7 +62,7 @@ export const ChatMessage: React.FC<{
 
   const isUser = role === 'user';
   const avatarGradient = isUser ? GRADIENT.userAvatar : GRADIENT.aiAvatar;
-  const label = isUser ? '你' : 'Chat-Skills';
+  const label = isUser ? L(lang, '你', 'You') : 'Chat-Skills';
 
   return (
     <div style={{opacity, transform: `translateY(${y}px)`, display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 16}}>
@@ -85,7 +89,7 @@ export const ChatMessage: React.FC<{
             {label}
           </span>
           <span style={{fontFamily: FONTS.mono, fontSize: 11, color: COLORS.textMuted}}>
-            刚刚
+            {L(lang, '刚刚', 'just now')}
           </span>
         </div>
         <div
@@ -115,11 +119,12 @@ const SkillInvokeCard: React.FC<{
 }> = ({skillName, status, terminalLines, duration, opacity, y, enterFrame}) => {
   const frame = useCurrentFrame();
   const elapsed = frame - enterFrame;
+  const lang = useLanguage();
 
   const statusColors: Record<string, {bg: string; text: string; label: string}> = {
-    running: {bg: COLORS.blueDim, text: COLORS.blue, label: '运行中'},
-    success: {bg: COLORS.greenDim, text: COLORS.green, label: '完成'},
-    error: {bg: COLORS.redDim, text: COLORS.red, label: '失败'},
+    running: {bg: COLORS.blueDim, text: COLORS.blue, label: L(lang, '运行中', 'Running')},
+    success: {bg: COLORS.greenDim, text: COLORS.green, label: L(lang, '完成', 'Done')},
+    error: {bg: COLORS.redDim, text: COLORS.red, label: L(lang, '失败', 'Failed')},
   };
   const st = statusColors[status];
 
@@ -237,7 +242,7 @@ const SkillInvokeCard: React.FC<{
             color: COLORS.textMuted,
           }}
         >
-          <span>耗时 {duration}</span>
+          <span>{L(lang, '耗时', 'Duration:')} {duration}</span>
           <span>exit code: 0</span>
         </div>
       )}

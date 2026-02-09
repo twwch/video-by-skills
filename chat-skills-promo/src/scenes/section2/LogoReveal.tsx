@@ -2,13 +2,16 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {Logo} from '../../components/ui/Logo';
 import {GradientSweep} from '../../components/effects/GradientSweep';
 import {GradientText} from '../../components/text/GradientText';
 import {easeOutCubic} from '../../utils/easing';
 
 export const LogoReveal: React.FC = () => {
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const frame = useCurrentFrame();
 
   const taglineOpacity = interpolate(frame, [100, 130], [0, 1], {

@@ -2,7 +2,9 @@ import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
 import {COLORS} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {easeOutBack} from '../../utils/easing';
 
 export const SkillDropdown: React.FC<{
@@ -11,6 +13,8 @@ export const SkillDropdown: React.FC<{
   selectFrame?: number;
 }> = ({startFrame = 0, selectedIndex = 0, selectFrame = 30}) => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const elapsed = frame - startFrame;
   const scale = interpolate(elapsed, [0, 12], [0.9, 1], {
     easing: easeOutBack,
@@ -46,7 +50,7 @@ export const SkillDropdown: React.FC<{
           borderBottom: `1px solid ${COLORS.borderGlass}`,
         }}
       >
-        选择技能
+        {L(lang, '选择技能', 'Select Skill')}
       </div>
       {CONTENT.skills.map((skill, i) => {
         const isHighlighted = isSelected && i === selectedIndex;

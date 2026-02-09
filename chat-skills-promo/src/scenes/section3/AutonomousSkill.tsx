@@ -2,22 +2,14 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {FeatureLabel} from '../../components/ui/FeatureLabel';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
 import {Scanlines} from '../../components/effects/Scanlines';
 import {easeOutCubic} from '../../utils/easing';
-
-const TREE_NODES = [
-  {label: '分析请求', x: 260, y: 50, level: 0},
-  {label: '选择技能', x: 130, y: 160, level: 1},
-  {label: '验证权限', x: 390, y: 160, level: 1},
-  {label: 'terminal', x: 70, y: 275, level: 2},
-  {label: 'file-gen', x: 240, y: 275, level: 2},
-  {label: 'web-search', x: 410, y: 275, level: 2},
-  {label: '执行', x: 260, y: 380, level: 3},
-];
 
 const TREE_EDGES: number[][] = [
   [0, 1], [0, 2], [1, 3], [1, 4], [2, 4], [2, 5], [3, 6], [4, 6],
@@ -25,7 +17,19 @@ const TREE_EDGES: number[][] = [
 
 export const AutonomousSkill: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[0];
+
+  const TREE_NODES = [
+    {label: L(lang, '分析请求', 'Analyze'), x: 260, y: 50, level: 0},
+    {label: L(lang, '选择技能', 'Select Skill'), x: 130, y: 160, level: 1},
+    {label: L(lang, '验证权限', 'Check Perms'), x: 390, y: 160, level: 1},
+    {label: 'terminal', x: 70, y: 275, level: 2},
+    {label: 'file-gen', x: 240, y: 275, level: 2},
+    {label: 'web-search', x: 410, y: 275, level: 2},
+    {label: L(lang, '执行', 'Execute'), x: 260, y: 380, level: 3},
+  ];
 
   return (
     <AbsoluteFill style={{background: COLORS.bgPrimary}}>
@@ -54,11 +58,11 @@ export const AutonomousSkill: React.FC = () => {
                 </div>
                 <div>
                   <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
-                    <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
-                    <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                    <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
+                    <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                   </div>
                   <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                    帮我创建一个 React 项目并安装依赖
+                    {L(lang, '帮我创建一个 React 项目并安装依赖', 'Create a React project and install dependencies')}
                   </div>
                 </div>
               </div>
@@ -71,10 +75,10 @@ export const AutonomousSkill: React.FC = () => {
                 <div>
                   <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
                     <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
-                    <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                    <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                   </div>
                   <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5, marginBottom: 8}}>
-                    正在分析请求，自动选择最合适的技能...
+                    {L(lang, '正在分析请求，自动选择最合适的技能...', 'Analyzing request, selecting the best skill...')}
                   </div>
                   {/* Skill selection chips */}
                   <div style={{display: 'flex', gap: 6, opacity: interpolate(frame, [80, 95], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>

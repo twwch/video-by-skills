@@ -2,7 +2,9 @@ import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {COLORS, GRADIENT} from '../../config/colors';
 import {FONTS} from '../../config/typography';
-import {CONTENT} from '../../config/content';
+import {getContent} from '../../config/content';
+import {L} from '../../config/i18n';
+import {useLanguage} from '../../contexts/LanguageContext';
 import {FeatureLabel} from '../../components/ui/FeatureLabel';
 import {PulseGlow} from '../../components/effects/PulseGlow';
 import {ParticleField} from '../../components/effects/ParticleField';
@@ -22,12 +24,14 @@ const SEND_FRAME = 120;
 
 export const MentionSyntax: React.FC = () => {
   const frame = useCurrentFrame();
+  const lang = useLanguage();
+  const CONTENT = getContent(lang);
   const feature = CONTENT.features[3];
 
   const isSent = frame >= SEND_FRAME;
 
   // Input typing — only before send
-  const fullText = '@ui-ux-pro-max 设计一个 AI 对话产品的原型图';
+  const fullText = L(lang, '@ui-ux-pro-max 设计一个 AI 对话产品的原型图', '@ui-ux-pro-max design a prototype for an AI chat product');
   const charCount = isSent ? 0 : Math.min(Math.floor(Math.max(0, frame - 50) * 0.5), fullText.length);
   const displayedInput = isSent ? '' : fullText.slice(0, charCount);
 
@@ -55,11 +59,11 @@ export const MentionSyntax: React.FC = () => {
 
             {/* Usage examples */}
             <div style={{marginTop: 28, opacity: interpolate(frame, [40, 55], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), transform: `translateY(${interpolate(frame, [40, 55], [12, 0], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}px)`}}>
-              <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textMuted, marginBottom: 10}}>使用示例</div>
+              <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textMuted, marginBottom: 10}}>{L(lang, '使用示例', 'Examples')}</div>
               {[
-                {text: '@terminal npm run build', desc: '执行构建命令'},
-                {text: '@file-gen 创建 API 路由', desc: '生成代码文件'},
-                {text: '@ui-ux-pro-max 设计原型图', desc: 'UI/UX 设计智能'},
+                {text: '@terminal npm run build', desc: L(lang, '执行构建命令', 'Run build command')},
+                {text: '@file-gen 创建 API 路由', desc: L(lang, '生成代码文件', 'Generate code file')},
+                {text: '@ui-ux-pro-max 设计原型图', desc: L(lang, 'UI/UX 设计智能', 'UI/UX design intelligence')},
               ].map((example, i) => (
                 <div key={i} style={{padding: '8px 12px', borderRadius: 8, background: COLORS.bgCard, border: `1px solid ${i === 2 ? COLORS.cyan + '30' : COLORS.borderGlass}`, marginBottom: 8, opacity: interpolate(frame, [55 + i * 10, 65 + i * 10], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>
                   <div style={{fontFamily: FONTS.mono, fontSize: 13, color: COLORS.textPrimary, marginBottom: 2}}>
@@ -76,7 +80,7 @@ export const MentionSyntax: React.FC = () => {
             <div style={{borderRadius: 16, border: `1px solid ${COLORS.borderGlass}`, background: `${COLORS.bgSecondary}90`, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: 600}}>
               {/* Chat top bar */}
               <div style={{display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderBottom: `1px solid ${COLORS.borderGlass}`, background: 'rgba(255,255,255,0.02)', flexShrink: 0}}>
-                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>UI 原型设计</span>
+                <span style={{fontFamily: FONTS.cn, fontSize: 13, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, 'UI 原型设计', 'UI Prototype')}</span>
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.cyan, padding: '2px 8px', borderRadius: 10, background: 'rgba(6,182,212,0.15)'}}>5 Skills</span>
                 <div style={{flex: 1}} />
                 <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>tokens: 3.4k</span>
@@ -94,10 +98,10 @@ export const MentionSyntax: React.FC = () => {
                     <div>
                       <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
                         <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
-                        <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>1 分钟前</span>
+                        <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '1 分钟前', '1 min ago')}</span>
                       </div>
                       <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                        项目已创建完成，需要我帮你设计 UI 吗？
+                        {L(lang, '项目已创建完成，需要我帮你设计 UI 吗？', 'Project created. Would you like me to design the UI?')}
                       </div>
                     </div>
                   </div>
@@ -110,11 +114,11 @@ export const MentionSyntax: React.FC = () => {
                       </div>
                       <div>
                         <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
-                          <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>你</span>
-                          <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                          <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>{L(lang, '你', 'You')}</span>
+                          <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                         </div>
                         <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5}}>
-                          <span style={{color: COLORS.cyan, fontWeight: 600}}>@ui-ux-pro-max</span> 设计一个 AI 对话产品的原型图
+                          <span style={{color: COLORS.cyan, fontWeight: 600}}>@ui-ux-pro-max</span>{L(lang, ' 设计一个 AI 对话产品的原型图', ' design a prototype for an AI chat product')}
                         </div>
                       </div>
                     </div>
@@ -129,10 +133,10 @@ export const MentionSyntax: React.FC = () => {
                       <div style={{flex: 1}}>
                         <div style={{display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3}}>
                           <span style={{fontFamily: FONTS.body, fontSize: 12, fontWeight: 600, color: COLORS.textPrimary}}>Chat-Skills</span>
-                          <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>刚刚</span>
+                          <span style={{fontFamily: FONTS.mono, fontSize: 10, color: COLORS.textMuted}}>{L(lang, '刚刚', 'just now')}</span>
                         </div>
                         <div style={{fontFamily: FONTS.cn, fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5, marginBottom: 10}}>
-                          已为你生成 AI 对话产品的原型设计：
+                          {L(lang, '已为你生成 AI 对话产品的原型设计：', 'Generated the prototype design for the AI chat product:')}
                         </div>
 
                         {/* Skill invoke card — ui-ux-pro-max wireframe */}
@@ -226,7 +230,7 @@ export const MentionSyntax: React.FC = () => {
                           <span>{displayedInput.slice(1)}</span>
                         </>
                       ) : (
-                        <span style={{color: COLORS.textMuted}}>输入 @ 调用技能...</span>
+                        <span style={{color: COLORS.textMuted}}>{L(lang, '输入 @ 调用技能...', 'Type @ to invoke a skill...')}</span>
                       )}
                       {!isSent && <span style={{opacity: interpolate(Math.sin(frame * 0.15), [-1, 1], [0, 1]), color: COLORS.cyan, marginLeft: 1}}>▋</span>}
                     </div>
@@ -239,7 +243,7 @@ export const MentionSyntax: React.FC = () => {
                   {dropdownVisible && (
                     <div style={{position: 'absolute', bottom: '100%', left: 0, marginBottom: 8, width: 320, background: COLORS.bgSecondary, border: `1px solid ${COLORS.borderGlass}`, borderRadius: 12, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', opacity: interpolate(frame, [25, 33], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), transform: `scale(${interpolate(frame, [25, 33], [0.95, 1], {easing: easeOutBack, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}) translateY(${interpolate(frame, [25, 33], [8, 0], {easing: easeOutCubic, extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}px)`}}>
                       <div style={{padding: '8px 14px', fontFamily: FONTS.cn, fontSize: 12, color: COLORS.textMuted, borderBottom: `1px solid ${COLORS.borderGlass}`}}>
-                        选择技能
+                        {L(lang, '选择技能', 'Select Skill')}
                       </div>
                       {CONTENT.skills.map((skill, i) => {
                         const isHighlighted = frame >= dropdownSelectedFrame && i === 3;
